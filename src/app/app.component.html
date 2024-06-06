@@ -1,0 +1,49 @@
+<div>
+  <div class="col col-xs-3" style="display: flex; justify-content: center;">
+    <input placeholder="Search ..." type="text" class="form-control" [(ngModel)]="searchText" >
+  </div>
+  <div class="table-tbody-scroll" style="width: auto">
+    <table class="table pd-b-5" style="width: 100%;">
+      <thead>
+        <tr style="background-color: chocolate;">
+          <th>Location <span style="cursor:pointer" (click)="sortById('location')"></span></th>
+          <th>Applicant <span style="cursor:pointer" (click)="sortById('applicant')"></span></th>
+          <th>Address <span style="cursor:pointer" (click)="sortById('address')"></span></th>
+          <th>FoodItems <span style="cursor:pointer" (click)="sortById('foodItems')"></span></th>
+          <th>Map <span style="cursor:pointer" (click)="sortById('map')"></span></th>
+          <th>Menu <span style="cursor:pointer" (click)="sortById('menu')"></span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let truck of truckArray | customFilter:searchText; let i = index"
+          [ngClass]="{alternate: i % 2 == 0 }">
+          <td>{{truck.locationid}}</td>
+          <td>{{truck.Applicant}}</td>
+          <td>{{truck.Address}}</td>
+          <td style="max-width: 300px;">{{truck.FoodItems}}</td>
+          <td><img *ngIf="truck && truck.Latitude && truck.Longitude" class="img-w25" src="assets/loc.png"
+              (click)="openMap(truck)" /></td>
+          <td>
+            <button class="btn btn-primary" *ngIf="truck.FoodItems.length>0"
+              (click)="openModal(modal, truck.FoodItems)">Menu</button>
+          </td>
+        </tr>
+    </table>
+  </div>
+
+  <!-- <app-modal #modal [menu]="foodItems"></app-modal> -->
+
+  <app-modal #modal [active]="isActive">
+    <h1>Menu Items</h1>
+    <p>{{foodItemsList}}</p>
+    <button (click)="closeModal(modal)">
+      Close
+    </button>
+  </app-modal>
+
+ <div style="display: flex; justify-content: center; margin-top: 1rem;">
+  <app-pagination [currentPage]="currentPage" [itemsPerPage]="itemsPerPage" [totalItems]="totalItems"
+  (pageChanged)="onPageChange($event)"></app-pagination>
+ </div>
+
+</div>
